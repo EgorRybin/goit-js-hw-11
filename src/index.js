@@ -5,7 +5,7 @@ const API_KEY = '29634841-061e0c7ab4009b86045ba35d0';
 const URL = 'https://pixabay.com/api/?key=';
 axios.defaults.baseURL = 'https://pixabay.com/api/?key=';
 
-refs = {
+const refs = {
   form: document.querySelector('form'),
   input: document.querySelector('input'),
   searchBtn: document.querySelector('[type="submit"]'),
