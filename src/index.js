@@ -16,7 +16,6 @@ const refs = {
 let pageNumber = 1;
 let totalPages = 0;
 
-
 refs.form.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
@@ -28,33 +27,33 @@ async function onSubmit(evt) {
   try {
     const data = await getFoto(inputText);
     const markup = markupGallery(data.hits);
-      if (markup.length <= 0) {
-        refs.loadMoreBtn.classList.add('is-hidden');
-        Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      }
+    if (markup.length <= 0) {
+      refs.loadMoreBtn.classList.add('is-hidden');
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
     renderGallery(markup);
   } catch (error) {
     console.log('error', error);
   }
 }
- 
- async function onLoadMore() {
-   pageNumber += 1;  
-   const { data } = await axios.get(
-     `${URL}${API_KEY}&q=${refs.input.value}&page=${pageNumber}&image_type=photo&per_page=40&orientation=horizontal&safesearch=true`
-   );
- let totalPages = data.totalHits;
-   if (totalPages < (pageNumber + 1) * 100) {
-     refs.loadMoreBtn.classList.add('is-hidden');
-     Notiflix.Notify.failure(
-       "We're sorry, but you've reached the end of search results."
-     );
-   }
-   const markup = markupGallery(data.hits);
-   refs.gallery.insertAdjacentHTML('beforeend', markup);
- }
+
+async function onLoadMore() {
+  pageNumber += 1;
+  const { data } = await axios.get(
+    `${URL}${API_KEY}&q=${refs.input.value}&page=${pageNumber}&image_type=photo&per_page=40&orientation=horizontal&safesearch=true`
+  );
+  let totalPages = data.totalHits;
+  if (totalPages < (pageNumber + 1) * 100) {
+    refs.loadMoreBtn.classList.add('is-hidden');
+    Notiflix.Notify.failure(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
+  const markup = markupGallery(data.hits);
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+}
 async function getFoto(inputText) {
   const { data } = await axios.get(
     `${URL}${API_KEY}&q=${inputText}&image_type=photo&per_page=40&orientation=horizontal&safesearch=true`
